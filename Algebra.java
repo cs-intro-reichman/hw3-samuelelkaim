@@ -1,67 +1,86 @@
-// Implements algebraic operations and the square root function without using 
-// the Java operations a + b, a - b, a * b, a / b, a % b, and without calling 
-// Math.sqrt. All the functions in this class operate on int values and
-// return int values.
-
 public class Algebra {
-	public static void main(String args[]) {
-	    // Tests some of the operations
-	    System.out.println(plus(2,3));   // 2 + 3
-	    System.out.println(minus(7,2));  // 7 - 2
-   		System.out.println(minus(2,7));  // 2 - 7
- 		System.out.println(times(3,4));  // 3 * 4
-   		System.out.println(plus(2,times(4,2)));  // 2 + 4 * 2
-   		System.out.println(pow(5,3));      // 5^3
-   		System.out.println(pow(3,5));      // 3^5
-   		System.out.println(div(12,3));   // 12 / 3    
-   		System.out.println(div(5,5));    // 5 / 5  
-   		System.out.println(div(25,7));   // 25 / 7
-   		System.out.println(mod(25,7));   // 25 % 7
-   		System.out.println(mod(120,6));  // 120 % 6    
-   		System.out.println(sqrt(36));
-		System.out.println(sqrt(263169));
-   		System.out.println(sqrt(76123));
-	}  
 
-	// Returns x1 + x2
-	public static int plus(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
-	}
+    // Addition
+    public static int plus(int a, int b) {
+        while (b != 0) {
+            a++;
+            b--;
+        }
+        return a;
+    }
 
-	// Returns x1 - x2
-	public static int minus(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
-	}
+    // Soustraction
+    public static int minus(int a, int b) {
+        while (b != 0) {
+            a--;
+            b--;
+        }
+        return a;
+    }
 
-	// Returns x1 * x2
-	public static int times(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
-	}
+    // Multiplication
+    public static int times(int a, int b) {
+        int result = 0;
+        while (b > 0) {
+            result = plus(result, a);
+            b = minus(b, 1);
+        }
+        return result;
+    }
 
-	// Returns x^n (for n >= 0)
-	public static int pow(int x, int n) {
-		// Replace the following statement with your code
-		return 0;
-	}
+    // Puissance
+    public static int pow(int a, int b) {
+        if (b == 0) return 1; // Toute valeur puissance 0 est 1
+        int result = 1;
+        while (b > 0) {
+            result = times(result, a);
+            b = minus(b, 1);
+        }
+        return result;
+    }
 
-	// Returns the integer part of x1 / x2 
-	public static int div(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
-	}
+    // Division entière
+    public static int div(int a, int b) {
+        if (b == 0) throw new ArithmeticException("Division by zero"); // Gestion d'erreur
+        int result = 0;
+        while (a >= b) {
+            a = minus(a, b);
+            result++;
+        }
+        return result;
+    }
 
-	// Returns x1 % x2
-	public static int mod(int x1, int x2) {
-		// Replace the following statement with your code
-		return 0;
-	}	
+    // Modulo
+    public static int mod(int a, int b) {
+        if (b == 0) throw new ArithmeticException("Division by zero"); // Gestion d'erreur
+        while (a >= b) {
+            a = minus(a, b);
+        }
+        return a;
+    }
 
-	// Returns the integer part of sqrt(x) 
-	public static int sqrt(int x) {
-		// Replace the following statement with your code
-		return 0;
-	}	  	  
+    // Racine carrée (partie entière seulement)
+    public static int sqrt(int a) {
+        if (a < 0) throw new IllegalArgumentException("Negative input"); // Gestion d'erreur
+        int result = 0;
+        while (times(result, result) <= a) {
+            result++;
+        }
+        return minus(result, 1); // On ajuste pour ne pas dépasser la valeur exacte
+    }
+
+    // Test des fonctions
+    public static void main(String[] args) {
+        System.out.println("Plus: " + plus(4, 3));       // 7
+        System.out.println("Minus: " + minus(9, 5));     // 4
+        System.out.println("Times: " + times(3, 4));     // 12
+        System.out.println("Pow: " + pow(2, 3));         // 8
+        System.out.println("Div: " + div(10, 3));        // 3
+        System.out.println("Mod: " + mod(10, 3));        // 1
+        System.out.println("Sqrt: " + sqrt(16));         // 4
+    }
 }
+
+
+	
+	
