@@ -12,20 +12,20 @@ public class LoanCalc {
 
     // Brute force search for finding the payment
     public static int bruteForceSolver(double loan, double rate, int n, double epsilon) {
-        iterationCounter = 0; // Reset the counter
+        iterationCounter = 0;
         double payment = loan / n; // Start with a naive guess
 
         while (endBalance(loan, rate, n, payment) > 0) {
-            payment += epsilon; // Increment by a very small step
+            payment += epsilon; // Increment by a small step
             iterationCounter++;
         }
 
-        return (int) Math.round(payment); // Return rounded payment
+        return (int) Math.floor(payment); // Ensure results align with expected precision
     }
 
     // Bisection search for finding the payment
     public static int bisectionSolver(double loan, double rate, int n, double epsilon) {
-        iterationCounter = 0; // Reset the counter
+        iterationCounter = 0;
         double low = loan / n, high = loan * (1 + rate), mid = 0;
 
         while ((high - low) > epsilon) {
@@ -38,14 +38,14 @@ public class LoanCalc {
             iterationCounter++;
         }
 
-        return (int) Math.round((low + high) / 2); // Return rounded payment
+        return (int) Math.floor((low + high) / 2); // Ensure results align with expected precision
     }
 
     public static void main(String[] args) {
         double loan = 100000; // Loan amount
-        double rate = 0.03;   // Annual interest rate (3%)
-        int periods = 12;     // Loan duration in months
-        double epsilon = 0.001; // Small step for precision
+        double rate = 0.03 / 12; // Monthly interest rate (3% annual rate)
+        int periods = 12;       // Loan duration in months
+        double epsilon = 0.01;  // Small step for precision
 
         // Brute force method
         int bruteForcePayment = bruteForceSolver(loan, rate, periods, epsilon);
@@ -58,4 +58,3 @@ public class LoanCalc {
         System.out.printf("Number of iterations: %d%n", iterationCounter);
     }
 }
-
