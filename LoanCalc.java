@@ -1,55 +1,56 @@
-public class LoanCalculator {
 
-    private static int iterationCounter; // To track the number of iterations
+public class LoanCalc {
+
+    private static int iterationCounter; // To track iterations
 
     // Calculate the ending balance after n payments
-    public static double endBalance(double loan, double rate, int periods, double payment) {
-        for (int i = 0; i < periods; i++) {
-            loan = (loan - payment) * (1 + rate); // Subtract payment, then apply interest
+    public static double endBalance(double loan, double rate, int n, double payment) {
+        for (int i = 0; i < n; i++) {
+            loan = (loan - payment) * (1 + rate);
         }
         return loan;
     }
 
-    // Brute force method to find the payment
-    public static double bruteForceSolver(double loan, double rate, int periods, double epsilon) {
-        iterationCounter = 0; // Reset counter
-        double payment = loan / periods; // Initial guess for payment
+    // Brute force search for finding the payment
+    public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {
+        iterationCounter = 0;
+        double payment = loan / n;
 
-        while (endBalance(loan, rate, periods, payment) > epsilon) {
-            payment += epsilon; // Increment payment by epsilon
+        while (endBalance(loan, rate, n, payment) > epsilon) {
+            payment += epsilon;
             iterationCounter++;
         }
         return payment;
     }
 
-    // Bisection search method to find the payment
-    public static double bisectionSolver(double loan, double rate, int periods, double epsilon) {
-        iterationCounter = 0; // Reset counter
-        double low = loan / periods, high = loan * (1 + rate), mid;
+    // Bisection search for finding the payment
+    public static double bisectionSolver(double loan, double rate, int n, double epsilon) {
+        iterationCounter = 0;
+        double low = loan / n, high = loan * (1 + rate), mid = 0;
 
         while ((high - low) > epsilon) {
             mid = (low + high) / 2;
-            double balance = endBalance(loan, rate, periods, mid);
+            double balance = endBalance(loan, rate, n, mid);
 
-            if (Math.abs(balance) < epsilon) break; // Stop if balance is close to zero
-            if (balance > 0) low = mid; else high = mid; // Adjust bounds
+            if (Math.abs(balance) < epsilon) break;
+            if (balance > 0) low = mid; else high = mid;
 
             iterationCounter++;
         }
-        return (low + high) / 2; // Return the midpoint as the best approximation
+        return mid;
     }
 
     public static void main(String[] args) {
-        double loan = 100000; // Loan amount
-        double rate = 0.05;   // Annual interest rate
-        int years = 10;       // Loan duration in years
-        double epsilon = 0.01;// Precision for the solution
+        double loan = 100000;
+        double rate = 0.05;
+        int years = 10;
+        double epsilon = 0.01;
 
-        // Solve using brute force
+        // Brute force
         double bruteForcePayment = bruteForceSolver(loan, rate, years, epsilon);
         System.out.printf("Brute Force Payment: %.2f Shekels (Iterations: %d)%n", bruteForcePayment, iterationCounter);
 
-        // Solve using bisection search
+        // Bisection
         double bisectionPayment = bisectionSolver(loan, rate, years, epsilon);
         System.out.printf("Bisection Payment: %.2f Shekels (Iterations: %d)%n", bisectionPayment, iterationCounter);
     }
