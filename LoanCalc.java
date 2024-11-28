@@ -1,4 +1,5 @@
 
+
 public class LoanCalc {
 
     private static int iterationCounter; // To track iterations
@@ -42,8 +43,8 @@ public class LoanCalc {
 
     public static void main(String[] args) {
         double loan = 100000;
-        double rate = 0.05;
-        int years = 10;
+        double rate = 0.03;
+        int years = 12;
         double epsilon = 0.01;
 
         // Brute force
@@ -55,10 +56,3 @@ public class LoanCalc {
         System.out.printf("Bisection Payment: %.2f Shekels (Iterations: %d)%n", bisectionPayment, iterationCounter);
     }
 }
-
-    
-
-
-
-
-
