@@ -1,16 +1,18 @@
-import java.util.Random;
+
+
+   import java.util.Random;
 
 public class Anagram {
 
-    // Preprocess the string: Remove non-alphabetic characters and convert to lowercase
+    // Preprocess the string: Remove non-alphabetic characters (except spaces) and convert to lowercase
     public static String preProcess(String str) {
-        return str.replaceAll("[^a-zA-Z]", "").toLowerCase();
+        return str.replaceAll("[^a-zA-Z ]", "").toLowerCase(); // Allow spaces but remove punctuation
     }
 
     // Check if two strings are anagrams
     public static boolean isAnagram(String str1, String str2) {
-        str1 = preProcess(str1);
-        str2 = preProcess(str2);
+        str1 = preProcess(str1).replace(" ", ""); // Remove spaces for comparison
+        str2 = preProcess(str2).replace(" ", ""); // Remove spaces for comparison
 
         if (str1.length() != str2.length()) return false;
 
@@ -24,7 +26,7 @@ public class Anagram {
 
     // Generate a random anagram
     public static String randomAnagram(String str) {
-        str = preProcess(str); // Remove spaces and non-alphabetic characters
+        str = preProcess(str); // Retain spaces and lowercase only
         char[] chars = str.toCharArray();
         shuffleArray(chars); // Shuffle the array of characters
         return new String(chars);
@@ -43,8 +45,8 @@ public class Anagram {
 
     public static void main(String[] args) {
         // Test preProcess method
-        System.out.println("PreProcess (simple): " + preProcess("Nag a Ram!")); // Expected: "nagaram"
-        System.out.println("PreProcess (spaces): " + preProcess("Hello World!")); // Expected: "helloworld"
+        System.out.println("PreProcess (simple): " + preProcess("Nag a Ram!")); // Expected: "nag a ram"
+        System.out.println("PreProcess (spaces): " + preProcess("Hello   World!")); // Expected: "hello   world"
         System.out.println("PreProcess (case): " + preProcess("ABCdef")); // Expected: "abcdef"
         System.out.println("PreProcess (empty): " + preProcess("")); // Expected: ""
 
@@ -55,9 +57,6 @@ public class Anagram {
 
         // Test randomAnagram method
         System.out.println("Random Anagram (java): " + randomAnagram("java")); // Random permutation of "java"
-        System.out.println("Random Anagram (hello): " + randomAnagram("hello")); // Random permutation of "hello"
+        System.out.println("Random Anagram (hello world): " + randomAnagram("hello world")); // Random permutation
     }
 }
-
-
- 
