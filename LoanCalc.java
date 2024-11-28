@@ -63,6 +63,3 @@ public class LoanCalc {
         System.out.printf("Number of iterations: %d%n", iterationCounter);
     }
 }
-
-  
-      
