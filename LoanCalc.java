@@ -3,9 +3,9 @@ public class LoanCalc {
     private static int iterationCounter; // To track iterations
 
     // Calculate the ending balance after n payments
-    public static double endBalance(double loan, double rate, int periods, double payment) {
+    public static double endBalance(double loan, double monthlyRate, int periods, double payment) {
         for (int i = 0; i < periods; i++) {
-            loan = (loan - payment) * (1 + rate);
+            loan = (loan - payment) * (1 + monthlyRate);
         }
         return loan;
     }
@@ -14,22 +14,23 @@ public class LoanCalc {
     public static int bruteForceSolver(double loan, double annualRate, int periods, double epsilon) {
         iterationCounter = 0;
         double monthlyRate = annualRate / 12; // Convert annual rate to monthly
-        double payment = loan / periods; // Start with a naive guess
+        double payment = loan / periods; // Start with a basic guess
 
+        // Increment payment until the balance reaches close to zero
         while (endBalance(loan, monthlyRate, periods, payment) > 0) {
-            payment += epsilon; // Increment payment by small steps
+            payment += epsilon;
             iterationCounter++;
         }
 
-        return (int) Math.floor(payment); // Ensure integer result matches expectations
+        return (int) Math.round(payment); // Round the result to an integer
     }
 
     // Bisection search for finding the payment
     public static int bisectionSolver(double loan, double annualRate, int periods, double epsilon) {
         iterationCounter = 0;
         double monthlyRate = annualRate / 12; // Convert annual rate to monthly
-        double low = loan / periods; // Lower bound for payment
-        double high = loan * (1 + monthlyRate); // Upper bound for payment
+        double low = loan / periods; // Lower bound
+        double high = loan * (1 + monthlyRate); // Upper bound
         double mid;
 
         while ((high - low) > epsilon) {
@@ -42,11 +43,11 @@ public class LoanCalc {
             iterationCounter++;
         }
 
-        return (int) Math.floor((low + high) / 2); // Ensure integer result matches expectations
+        return (int) Math.round((low + high) / 2); // Round the result to an integer
     }
 
     public static void main(String[] args) {
-        // Test Case 1
+        // Example Test Case
         double loan = 100000; // Loan amount
         double annualRate = 0.03; // Annual interest rate (3%)
         int periods = 12; // Loan duration in months
@@ -63,3 +64,5 @@ public class LoanCalc {
         System.out.printf("Number of iterations: %d%n", iterationCounter);
     }
 }
+
+  
