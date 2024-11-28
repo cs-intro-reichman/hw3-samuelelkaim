@@ -1,66 +1,58 @@
-public class LoanCalc {
+public class LoanCalculator {
 
-    private static int iterationCounter; // Compteur pour les itérations
+    private static int iterationCounter; // To track the number of iterations
 
-    // Calculer le solde restant après n paiements
-    public static double endBalance(double loan, double monthlyRate, int periods, double payment) {
+    // Calculate the ending balance after n payments (payment at the start of the year)
+    public static double endBalance(double loan, double rate, int periods, double payment) {
         for (int i = 0; i < periods; i++) {
-            loan = (loan - payment) * (1 + monthlyRate); // Réduction du prêt et application des intérêts
+            loan = loan * (1 + rate / 100) - payment; // Apply interest first, then subtract payment
         }
         return loan;
     }
 
-    // Recherche brute pour trouver le paiement
-    public static int bruteForceSolver(double loan, double annualRate, int periods, double epsilon) {
-        iterationCounter = 0;
-        double monthlyRate = annualRate / 12; // Convertir le taux annuel en taux mensuel
-        double payment = loan / periods; // Point de départ initial pour le paiement
+    // Brute force method to find the payment
+    public static double bruteForceSolver(double loan, double rate, int periods, double epsilon) {
+        iterationCounter = 0; // Reset counter
+        double payment = loan / periods; // Initial guess for payment
 
-        // Augmenter le paiement jusqu'à ce que le solde soit proche de zéro
-        while (endBalance(loan, monthlyRate, periods, payment) > 0) {
-            payment += epsilon; // Incrément par petites étapes
+        while (endBalance(loan, rate, periods, payment) > epsilon) {
+            payment += epsilon; // Increment payment by epsilon
             iterationCounter++;
         }
-
-        return (int) Math.round(payment); // Arrondi au nombre entier le plus proche
+        return payment;
     }
 
-    // Recherche par dichotomie pour trouver le paiement
-    public static int bisectionSolver(double loan, double annualRate, int periods, double epsilon) {
-        iterationCounter = 0;
-        double monthlyRate = annualRate / 12; // Convertir le taux annuel en taux mensuel
-        double low = loan / periods; // Limite inférieure pour le paiement
-        double high = loan * (1 + monthlyRate); // Limite supérieure pour le paiement
-        double mid;
+    // Bisection search method to find the payment
+    public static double bisectionSolver(double loan, double rate, int periods, double epsilon) {
+        iterationCounter = 0; // Reset counter
+        double low = loan / periods, high = loan * (1 + rate / 100), mid;
 
         while ((high - low) > epsilon) {
-            mid = (low + high) / 2; // Calculer le point médian
-            double balance = endBalance(loan, monthlyRate, periods, mid);
+            mid = (low + high) / 2;
+            double balance = endBalance(loan, rate, periods, mid);
 
-            if (Math.abs(balance) < epsilon) break; // Solde suffisamment proche de zéro
-            if (balance > 0) low = mid; else high = mid; // Ajuster les limites
+            if (Math.abs(balance) < epsilon) break; // Stop if balance is close to zero
+            if (balance > 0) low = mid; else high = mid; // Adjust bounds
 
             iterationCounter++;
         }
-
-        return (int) Math.round((low + high) / 2); // Arrondi au nombre entier le plus proche
+        return (low + high) / 2; // Return the midpoint as the best approximation
     }
 
     public static void main(String[] args) {
-        // Cas de test
-        double loan = 100000; // Montant du prêt
-        double annualRate = 0.03; // Taux d'intérêt annuel (3 %)
-        int periods = 12; // Durée du prêt en mois
-        double epsilon = 0.01; // Précision pour le paiement
+        double loan = 100000; // Loan amount
+        double rate = 5;   // Annual interest rate
+        int years = 10;       // Loan duration in years
+        double epsilon = 0.01;// Precision for the solution
 
-        // Méthode de recherche brute
-        int bruteForcePayment = bruteForceSolver(loan, annualRate, periods, epsilon);
-        System.out.printf("Paiement périodique, méthode brute : %d%n", bruteForcePayment);
-        System.out.printf("Nombre d'itérations : %d%n", iterationCounter);
+        // Solve using brute force
+        double bruteForcePayment = bruteForceSolver(loan, rate, years, epsilon);
+        System.out.printf("Brute Force Payment: %.2f Shekels (Iterations: %d)%n", bruteForcePayment, iterationCounter);
 
-        // Méthode de recherche par dichotomie
-        int bisectionPayment = bisectionSolver(loan, annualRate, periods, epsilon);
-        System.out.printf("Paiement périodique, méthode dichotomie : %d%n", bisectionPayment);
-        System.out.printf("Nombre d'itérations : %d%n", iterationCounter);
+        // Solve using bisection search
+        double bisectionPayment = bisectionSolver(loan, rate, years, epsilon);
+        System.out.printf("Bisection Payment: %.2f Shekels (Iterations: %d)%n", bisectionPayment, iterationCounter);
     }
 }
+
+ 
