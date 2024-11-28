@@ -9,7 +9,7 @@ public class Algebra {
         return a;
     }
 
-    // Soustraction
+    // Subtraction
     public static int minus(int a, int b) {
         while (b != 0) {
             a--;
@@ -18,7 +18,7 @@ public class Algebra {
         return a;
     }
 
-    // Multiplication
+    // Multiplication using addition
     public static int times(int a, int b) {
         int result = 0;
         while (b > 0) {
@@ -28,9 +28,9 @@ public class Algebra {
         return result;
     }
 
-    // Puissance
+    // Power using multiplication
     public static int pow(int a, int b) {
-        if (b == 0) return 1; // Toute valeur puissance 0 est 1
+        if (b == 0) return 1;
         int result = 1;
         while (b > 0) {
             result = times(result, a);
@@ -39,9 +39,9 @@ public class Algebra {
         return result;
     }
 
-    // Division entière
+    // Integer division using subtraction
     public static int div(int a, int b) {
-        if (b == 0) throw new ArithmeticException("Division by zero"); // Gestion d'erreur
+        if (b == 0) throw new ArithmeticException("Division by zero");
         int result = 0;
         while (a >= b) {
             a = minus(a, b);
@@ -50,34 +50,34 @@ public class Algebra {
         return result;
     }
 
-    // Modulo
+    // Modulo using subtraction
     public static int mod(int a, int b) {
-        if (b == 0) throw new ArithmeticException("Division by zero"); // Gestion d'erreur
+        if (b == 0) throw new ArithmeticException("Division by zero");
         while (a >= b) {
             a = minus(a, b);
         }
         return a;
     }
 
-    // Racine carrée (partie entière seulement)
+    // Square root using repeated subtraction
     public static int sqrt(int a) {
-        if (a < 0) throw new IllegalArgumentException("Negative input"); // Gestion d'erreur
+        if (a < 0) throw new IllegalArgumentException("Negative input");
         int result = 0;
         while (times(result, result) <= a) {
             result++;
         }
-        return minus(result, 1); // On ajuste pour ne pas dépasser la valeur exacte
+        return minus(result, 1);
     }
 
-    // Test des fonctions
+    // Main function for testing
     public static void main(String[] args) {
-        System.out.println("Plus: " + plus(4, 3));       // 7
-        System.out.println("Minus: " + minus(9, 5));     // 4
-        System.out.println("Times: " + times(3, 4));     // 12
-        System.out.println("Pow: " + pow(2, 3));         // 8
-        System.out.println("Div: " + div(10, 3));        // 3
-        System.out.println("Mod: " + mod(10, 3));        // 1
-        System.out.println("Sqrt: " + sqrt(16));         // 4
+        System.out.println("Plus: " + plus(4, 3));       // Expected: 7
+        System.out.println("Minus: " + minus(9, 5));     // Expected: 4
+        System.out.println("Times: " + times(3, 4));     // Expected: 12
+        System.out.println("Pow: " + pow(2, 3));         // Expected: 8
+        System.out.println("Div: " + div(10, 3));        // Expected: 3
+        System.out.println("Mod: " + mod(10, 3));        // Expected: 1
+        System.out.println("Sqrt: " + sqrt(16));         // Expected: 4
     }
 }
 
